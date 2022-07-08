@@ -9,16 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class K8sService1Application {
-
-    @Value("${APPLICATION_NAME:}")
-    private String applicationName;
+    @Value("${HOSTNAME:default}")
+    private String hostname;
 
     public static void main(String[] args) {
         SpringApplication.run(K8sService1Application.class, args);
     }
 
-    @GetMapping("/hello-world")
+    @GetMapping("/hostname")
     public String helloWorld() {
-        return applicationName + " ::: " + "Hello World";
+        return hostname;
     }
 }
