@@ -4,17 +4,11 @@ metadata:
   name: k8s-service-1
   labels:
     app: k8s-service-1
-  namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: k8s-service-1
-#  strategy:
-#    rollingUpdate:
-#      maxSurge: 25%
-#      maxUnavailable: 25%
-#    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -24,8 +18,10 @@ spec:
         - name: jannusuraj-registry-secret
       containers:
         - name: k8s-service-1
-          image: 'jannusuraj/k8s-service-1:0.0.1'
+          image: jannusuraj/k8s-service-1:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-      restartPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: message-configmap

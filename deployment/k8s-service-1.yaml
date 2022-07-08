@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-service-1
+  labels:
+    app: k8s-service-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-service-1
+  template:
+    metadata:
+      labels:
+        app: k8s-service-1
+    spec:
+      imagePullSecrets:
+        - name: jannusuraj-registry-secret
+      containers:
+        - name: k8s-service-1
+          image: jannusuraj/k8s-service-1:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: message-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-service-1
+spec:
+  selector:
+    app: k8s-service-1
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: message-configmap
+data:
+  MESSAGE: Welcome
